@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "897753127617",
+    "project_id": "cartelera-a1e1c",
+    "storage_bucket": "cartelera-a1e1c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897753127617:android:02c93bb5bbbb142ade9240",
+        "android_client_info": {
+          "package_name": "com.example.movil"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4EDAIUM-UHACzVOftmaX02fGF1RyoRlU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

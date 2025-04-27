@@ -1,0 +1,1 @@
+flutterfire configure --project=cartelera-a1e1c
