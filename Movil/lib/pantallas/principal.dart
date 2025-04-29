@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -19,59 +13,149 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  double _counter = 0;
+  double get _imageSize => 50 + (_counter * 2);
+  final double _valorFijo = 5;
+
+  String _texto="";
+
+  void _obDatosB()async{
+    DocumentSnapshot documento = await db.collection("sumador").doc("documento").get();
+    setState(() {
+      _counter=documento.get("numero");
+    });
+  }
+
+  void _esBase() async{
+    Map<String,dynamic> datos = {
+      "numero":_counter
+    };
+    await db.collection("sumador").doc("documento").set(datos);
+  }
+
+  void _cambiaCaracter(String caracterViejo, String cadenaNueva){
+    setState(() {
+      _texto=_texto.replaceAll(caracterViejo,cadenaNueva);
+    });
+  }
 
   void _incrementCounter() {
+    Random r=Random();
+
+    int c = 97+r.nextInt(26);
     setState(() {
-      _counter++;
+      _texto+=String.fromCharCode(c);
+      _counter+=_valorFijo;
+      _esBase();
+    });
+  }
+  void _decrementCounter() {
+    setState(() {
+      if(_counter>=_valorFijo){
+        _texto=_texto.substring(0,_texto.length-1);
+        _counter-=_valorFijo;
+        _esBase();
+      }
+      if(_counter<_valorFijo){
+        _counter=0;
+      }
     });
   }
 
   @override
+  void initState(){
+    super.initState();
+    _obDatosB();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
+      drawer: Drawer(
+        child:
+        Center(
+
+      child: Column(
+
+      mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '2860',
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          SizedBox(
+            height: _imageSize,
+            width: _imageSize,
+            child: Image.network(
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8pw-2iAHIWDt2j0wezPCvhHLAucgS2n7bTw&s"
+            ),
+          ),Text(
+            '$_counter',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          FloatingActionButton(
+            onPressed: _decrementCounter,
+            tooltip: 'Resta',
+            child: const Text("Adios"),
+          ),
+          Text(
+            _texto,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          IconButton(
+              icon: Icon(Icons.directions_car_filled),
+              onPressed: (){
+                _cambiaCaracter("m", "n");
+              }
+          ),
+        ],
+      ),
+    ),
+      ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
+
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Text(
+              '2860',
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
+            SizedBox(
+              height: _imageSize,
+              width: _imageSize,
+              child: Image.network(
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8pw-2iAHIWDt2j0wezPCvhHLAucgS2n7bTw&s"
+              ),
+
+            ),
+
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            Image.network("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8pw-2iAHIWDt2j0wezPCvhHLAucgS2n7bTw&s")
+            FloatingActionButton(
+              onPressed: _decrementCounter,
+              tooltip: 'Resta',
+              child: const Text("Adios"),
+            ),
+            Text(
+              _texto,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            IconButton(
+                icon: Icon(Icons.directions_car_filled),
+                onPressed: (){
+                  _cambiaCaracter("m", "n");
+                }
+            ),
           ],
         ),
       ),
@@ -80,6 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+
     );
   }
 }

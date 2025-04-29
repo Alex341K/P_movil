@@ -3,6 +3,9 @@ import 'package:movil/pantallas/calculadora.dart';
 import 'package:movil/pantallas/principal.dart';
 import 'package:movil/pantallas/bienvenida.dart';
 import 'package:movil/pantallas/localizacion.dart';
+import 'package:movil/pantallas/ingresar.dart';
+import 'package:movil/pantallas/calendario.dart';
+import 'package:movil/pantallas/personalizado.dart';
 
 class Navegador extends StatefulWidget {
   const Navegador({super.key});
@@ -29,7 +32,10 @@ class _NavegadorState extends State<Navegador> {
     _pantallas.add(const MyHomePage(title: "Pantalla principal"));
     _pantallas.add(const Bienvenida(titulo: "Bienvenida"));
     _pantallas.add(const Calculadora(titulo: "Calculadora"));
-    _pantallas.add(const Localizacion(titulo: "tu localizacion"));
+    _pantallas.add(Ingresar(titulo:"Ingresa tu nombre", funcionCambio: _cambiaPantalla,));
+    _pantallas.add(const Localizacion(titulo: "Localizacion",));
+    _pantallas.add(const Calendario(titulo: "Agenda"));
+    _pantallas.add(const Bienvenidas(titulo: "Imagenes"));
     _cuerpo = _pantallas[_p];
   }
 
@@ -61,8 +67,28 @@ class _NavegadorState extends State<Navegador> {
             label: "Calculadora",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.location_on), // Icono más apropiado para localización
-            label: "Localización",
+            label: "Ingresa",
+            icon: Icon(
+            Icons.transit_enterexit,
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: "Localizacion",
+            icon: Icon(
+            Icons.local_activity_outlined,
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: "Agenda",
+            icon: Icon(
+            Icons.calendar_month,
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: "Personalizado",
+            icon: Icon(
+            Icons.accessibility,
+            ),
           ),
         ],
       ),
